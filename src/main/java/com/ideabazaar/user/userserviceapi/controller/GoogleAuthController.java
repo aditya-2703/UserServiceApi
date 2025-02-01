@@ -1,12 +1,11 @@
 package com.ideabazaar.user.userserviceapi.controller;
 
-
+import com.ideabazaar.user.userserviceapi.model.Role;
 import com.ideabazaar.user.userserviceapi.model.User;
 import com.ideabazaar.user.userserviceapi.repository.UserRepository;
-import com.ideabazaar.user.userserviceapi.service.UserDetailsServiceImpl;
+import com.ideabazaar.user.userserviceapi.service.AuthUserService;
 import com.ideabazaar.user.userserviceapi.utils.JwtUtil;
-
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -24,7 +23,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/auth/google")
-//@Slf4j
+@Slf4j
 public class GoogleAuthController {
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
@@ -37,7 +36,7 @@ public class GoogleAuthController {
     private RestTemplate restTemplate;
 
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    AuthUserService userDetailsService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -76,7 +75,11 @@ public class GoogleAuthController {
                     user.setEmail(email);
                     user.setName(email);
                     user.setPasswordHash(passwordEncoder.encode(UUID.randomUUID().toString()));
-//                    user.setRoles(Arrays.asList("USER"));
+                    Role role = new Role();
+                    role.setId(UUID.randomUUID().getMostSignificantBits());
+                    role.setName("ROLE_USER");
+                    role.getUsers().add(user);
+                    user.getRoles().add(role);
                     userRepository.save(user);
                 }
                 String jwtToken = jwtUtil.generateToken(email);

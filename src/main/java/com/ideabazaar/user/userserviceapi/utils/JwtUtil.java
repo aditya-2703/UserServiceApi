@@ -28,11 +28,11 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(getSigningKey())
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey()) // Use setSigningKey
                 .build()
-                .parseSignedClaims(token)
-                .getPayload();
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     private Boolean isTokenExpired(String token) {
@@ -46,13 +46,11 @@ public class JwtUtil {
 
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
-                .claims(claims)
-                .subject(subject)
-                .header().empty().add("typ","JWT")
-                .and()
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 5 minutes expiration time
-                .signWith(getSigningKey())
+                .setClaims(claims) // Use setClaims
+                .setSubject(subject) // Set subject
+                .setIssuedAt(new Date(System.currentTimeMillis())) // Set issued at
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // Set expiration (1 hour)
+                .signWith(getSigningKey()) // Sign the JWT
                 .compact();
     }
 

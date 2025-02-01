@@ -13,12 +13,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
 
 @Component
-public class JwtFilter  extends OncePerRequestFilter {
-
+public class JwtFilter  extends OncePerRequestFilter{
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -44,6 +42,4 @@ public class JwtFilter  extends OncePerRequestFilter {
         }
         chain.doFilter(request, response);
     }
-
-
 }
