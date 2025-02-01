@@ -2,6 +2,7 @@ package com.ideabazaar.user.userserviceapi.controller;
 
 import com.ideabazaar.user.userserviceapi.dto.UserDTO;
 import com.ideabazaar.user.userserviceapi.exceptions.UserNotFoundException;
+import com.ideabazaar.user.userserviceapi.service.GoogleAuthServiceImpl;
 import com.ideabazaar.user.userserviceapi.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,13 +13,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/register", produces = MediaType.APPLICATION_JSON_VALUE)
-public class User{
+public class UserController{
 
     UserService userService;
 
-    User(UserService userService) {
+    GoogleAuthServiceImpl googleAuthService;
+
+    UserController(UserService userService, GoogleAuthServiceImpl googleAuthService) {
         this.userService = userService;
+        this.googleAuthService = googleAuthService;
     }
+
 
     // Testing  http://localhost:/api/v1/register/auth
     @GetMapping("/testing")
@@ -70,6 +75,11 @@ public class User{
         } else {
             throw new UserNotFoundException(id);
         }
+    }
+
+    @GetMapping("/auth/token/{code}")
+    public ResponseEntity<?> getAuthToken(@PathVariable String code) {
+        return googleAuthService.handleCallback(code);
     }
 
 

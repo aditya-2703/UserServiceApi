@@ -17,8 +17,17 @@ public class Role {
     private String role;
 
     @ManyToOne
-    @JoinColumn(name = "username", nullable = false)
+    @JoinColumn(name = "id", nullable = false)
     private User users;
+
+
+    public User getUsers() {
+        return users;
+    }
+
+    public void setUsers(User users) {
+        this.users = users;
+    }
 
     // Getters and setters
 
@@ -38,11 +47,4 @@ public class Role {
         this.role = name;
     }
 
-    public User getUsers() {
-        return users;
-    }
-
-    public void setUsers(User users) {
-        this.users = users;
-    }
 }
