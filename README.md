@@ -1,5 +1,7 @@
 ## User API
 
+![usermodule](https://github.com/user-attachments/assets/26602ed9-bf45-4e42-84cf-f05160e8299a)
+
 **Description:** The User API is responsible for handling all user-related operations, such as registration, login, profile updates, and bookmarking projects.
 
 **Components:**
